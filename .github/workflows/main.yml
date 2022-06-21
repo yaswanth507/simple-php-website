@@ -15,5 +15,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
-          script: sh php.sh
+          script: |
+            cd /home/ubuntu/ 
+            git clone git@github.com:yaswanth507/simple-php-website.git
      
