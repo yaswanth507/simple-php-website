@@ -1,0 +1,20 @@
+name: Build & Deploy
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy BK app
+        uses: easingthemes/ssh-deploy@main
+    env:
+          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+          SOURCE: "user.zip"
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
+          script: sh php.sh
+     
