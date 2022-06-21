@@ -15,6 +15,7 @@ jobs:
           key: ${{secrets.KEY}} # Private or public key of the server
           username: ${{ secrets.USERNAME }}
           script: |
-            cd /home/ubuntu/ 
+            cd /var/www/html
             git clone git@github.com:yaswanth507/simple-php-website.git
+            
      
