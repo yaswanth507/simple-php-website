@@ -9,12 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy BK apps
-        uses: easingthemes/ssh-deploy@main
-    env:
-          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{secrets.HOST}} # IP address of the server you wish to ssh into
+          key: ${{secrets.KEY}} # Private or public key of the server
+          username: ${{ secrets.USERNAME }}
           script: |
             cd /home/ubuntu/ 
             git clone git@github.com:yaswanth507/simple-php-website.git
