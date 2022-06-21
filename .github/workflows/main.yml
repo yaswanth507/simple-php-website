@@ -5,8 +5,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  deploy_to_dev:
     runs-on: ubuntu-latest
+    environment: Dev
     steps:
       - name: Deploy BK apps
         uses: appleboy/ssh-action@v0.1.2
@@ -18,5 +19,21 @@ jobs:
             cd /home/ubuntu
             git clone git@github.com:yaswanth507/simple-php-website.git
             sudo mv simple-php-website /var/www/html 
+            
+  deploy_to_prod:
+     runs-on: ubuntu-latest
+     needs: deploy_to_dev
+     environment: Prod
+     steps:
+      - name: Deploy BK apps
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{secrets.HOST}} # IP address of the server you wish to ssh into
+          key: ${{secrets.KEY}} # Private or public key of the server
+          username: ${{ secrets.USERNAME }}
+          script: |
+            cd /home/ubuntu
+            git clone git@github.com:yaswanth507/simple-php-website.git
+            mv simple-php-website prod     
             
      
