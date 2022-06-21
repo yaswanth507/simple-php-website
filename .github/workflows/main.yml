@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy BK app
+      - name: Deploy BK apps
         uses: easingthemes/ssh-deploy@main
     env:
           SSH_PRIVATE_KEY: ${{ secrets.KEY }}
