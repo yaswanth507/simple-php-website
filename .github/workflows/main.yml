@@ -1,45 +1,27 @@
-name: Build & Deploy
+name: Deploy to Private Server
+
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches:
+      - master
 
 jobs:
-  deploy_to_dev:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: yaswanth507
-      - name: Deploy BK apps
-        uses: appleboy/ssh-action@v0.1.2
-        with:
-          host: ${{secrets.HOST}} # IP address of the server you wish to ssh into
-          key: ${{secrets.KEY}} # Private or public key of the server
-          username: ${{ secrets.USERNAME }}
-          script: |
-            cd /home/ubuntu
-            git clone git@github.com:yaswanth507/simple-php-website.git
-            sudo mv simple-php-website /var/www/html 
-            
-  deploy_to_prod:
-     runs-on: ubuntu-latest
-     needs: deploy_to_dev
-     steps:
-       - uses: trstringer/manual-approval@v1
-         with:
-          secret: ${{ github.TOKEN }}
-          approvers: yaswanth507
-       - name: Deploy BK apps
-         uses: appleboy/ssh-action@v0.1.2
-         with:
-          host: ${{secrets.HOST}} # IP address of the server you wish to ssh into
-          key: ${{secrets.KEY}} # Private or public key of the server
-          username: ${{ secrets.USERNAME }}
-          script: |
-            cd /home/ubuntu
-            git clone git@github.com:yaswanth507/simple-php-website.git
-            mv simple-php-website prod     
-            
-     
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn
+
+      - name: Start OpenVPN Connection
+        run: |
+          sudo openvpn --config test.ovpn --daemon
+          sleep 10  # Wait for VPN to establish
+
+      - name: Check VPN Connection
+        run: ip a  # Verify if VPN interface is up
