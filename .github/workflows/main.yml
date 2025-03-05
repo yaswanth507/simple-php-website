@@ -32,7 +32,7 @@ jobs:
         run: |
           sudo openvpn --config test.ovpn --auth-user-pass vpn-auth.txt --log openvpn.log --daemon
           sleep 15  # Wait for VPN to establish
-          cat openvpn.log
+          sudo cat openvpn.log
 
       - name: Verify VPN Connection
         run: |
