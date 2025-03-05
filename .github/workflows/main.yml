@@ -30,7 +30,7 @@ jobs:
 
       - name: Start OpenVPN Connection
         run: |
-          sudo openvpn --config test.ovpn --auth-user-pass vpn-auth.txt --daemon
+          sudo openvpn --config test.ovpn --auth-user-pass vpn-auth.txt --dev tun0 --daemon
           sleep 15  # Wait for VPN to establish
 
       - name: Verify VPN Connection
