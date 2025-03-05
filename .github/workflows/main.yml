@@ -18,22 +18,16 @@ jobs:
           sudo apt update
           sudo apt install -y openvpn
 
-      - name: Configure OpenVPN Credentials
+      - name: Create OpenVPN Credentials File
         run: |
           echo "${{ secrets.VPN_USERNAME }}" > vpn-auth.txt
           echo "${{ secrets.VPN_PASSWORD }}" >> vpn-auth.txt
-          chmod 600 vpn-auth.txt  # Secure the credentials file
-
-      - name: Configure OpenVPN
-        run: |
-          echo "${{ secrets.OVPN_CONFIG }}" | base64 --decode > vpn.ovpn
+          chmod 600 vpn-auth.txt
 
       - name: Start OpenVPN Connection
         run: |
-          sudo openvpn --config vpn.ovpn --auth-user-pass vpn-auth.txt --daemon
+          sudo openvpn --config test.ovpn --auth-user-pass vpn-auth.txt --daemon
           sleep 15  # Wait for VPN to establish
 
       - name: Verify VPN Connection
-        run: |
-          ip a  # List network interfaces
-          ping -c 4 192.168.0.179  # Ensure VPN connectivity
+        run: ping -c 4 192.168.0.179  # Replace with your private server IP
